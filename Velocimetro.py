@@ -1,6 +1,7 @@
 from machine import Pin
 import time
 import math
+import sdcard
 
 sensor = Pin(8, Pin.IN)
 led = Pin(13, Pin.OUT)
