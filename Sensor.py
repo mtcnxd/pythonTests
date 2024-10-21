@@ -6,9 +6,7 @@ import pymysql.cursors # type: ignore
 class Pycalc(Frame):
 	def __init__(self, master):
 		Frame.__init__(self, master)
-		self.parent = master
 		self.data = ""
-		self.temperature = StringVar()
 		self.Port = serial.Serial(port="/dev/ttyUSB0", baudrate=9600, timeout=5)		
 		
 		self.createWidgets()
@@ -57,17 +55,15 @@ class Pycalc(Frame):
 			self.entryTemperature.delete(0, END)
 			self.entryAltitude.delete(0, END)
 
-			self.temperature = self.data[0]
-
 			self.entryTemperature.insert(0, self.data[0] + " °C")
 			self.entryAltitude.insert(0, self.data[1] + " meters")
-			self.insertData()
+			self.insertData(self.data[0])
 
 		self.after(1000, self.getTemperature)
 
-	def insertData(self):
+	def insertData(self, temperature):
 		query = "INSERT INTO temperature (location, value) VALUES (%s, %s)"
-		values = ('office', self.temperature)
+		values = ('office', temperature)
 		
 		try:
 			cursor = self.connection.cursor()
