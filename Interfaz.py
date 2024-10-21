@@ -1,5 +1,5 @@
 from tkinter import *
-import requests
+import requests # type: ignore
 import json
 
 class Window(Frame):
