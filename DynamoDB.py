@@ -9,34 +9,37 @@ data = 0
 dynamodb = boto3.resource(
     'dynamodb', 
     region_name='us-east-1',
-
+    aws_access_key_id='AKIAS7FQORI46RDHT5EF',
+    aws_secret_access_key='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'
 )
 
-while True:
-    print ("Insert data: {}".format(data))
+table = dynamodb.Table('SensorLocations')
 
-    try:
-        table = dynamodb.Table('SensorLocations')
-        response = table.put_item(
-            Item={
-                'id': random.randint(0,9),
-                'date': str(data),
-                'name': 'Marcos',
-                'lastname': 'Tzuc'
-            }
-        )
-        print("Datos insertados exitosamente:", response)
-    except Exception as e:
-        print("Error al insertar datos:", e)
+print ("-----------------------------------------------------")
+print ("Insert data: {}".format(data))
+print ("-----------------------------------------------------")
 
-    time.sleep(1)
-    data = data + 1
-
-    response = table.query(
-        KeyConditionExpression = Key('id').eq(7) & Key('date').eq('5') # , FilterExpression = Attr('date').eq('Marcos')
+try:
+    response = table.put_item(
+        Item={
+            'id': random.randint(0,9),
+            'date': str(data),
+            'name': 'Marcos',
+            'lastname': 'Tzuc'
+        }
     )
+    print("Datos insertados exitosamente:", response)
+except Exception as e:
+    print("Error al insertar datos:", e)
+
+time.sleep(1)
+data = data + 1
+
+response = table.query(
+    KeyConditionExpression = Key('id').eq(7) & Key('date').eq('5') # , FilterExpression = Attr('date').eq('Marcos')
+)
 
 
-    print ("-----------------------------------------------------")
-    print (response)
-    print ("-----------------------------------------------------")
+print ("-----------------------------------------------------")
+print (response)
+print ("-----------------------------------------------------")
