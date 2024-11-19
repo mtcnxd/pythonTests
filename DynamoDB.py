@@ -9,8 +9,7 @@ data = 0
 dynamodb = boto3.resource(
     'dynamodb', 
     region_name='us-east-1',
-    aws_access_key_id='AKIAS7FQORI46RDHT5EF',
-    aws_secret_access_key='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'
+
 )
 
 table = dynamodb.Table('SensorLocations')
@@ -40,6 +39,4 @@ response = table.query(
 )
 
 
-print ("-----------------------------------------------------")
-print (response)
-print ("-----------------------------------------------------")
+print ("----------------------")
