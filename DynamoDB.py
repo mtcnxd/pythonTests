@@ -1,42 +1,59 @@
 import boto3
 import time
 import random
+import math
+import datetime
 from boto3.dynamodb.conditions import Key, Attr
-
-
-data = 0
 
 dynamodb = boto3.resource(
     'dynamodb', 
     region_name='us-east-1',
-
+    aws_access_key_id='AKIAS7FQORI46RDHT5EF',
+    aws_secret_access_key='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'
 )
 
-table = dynamodb.Table('SensorLocations')
+def scan_table(table):
+    response = table.scan()
+    data = response.get('Items', [])
 
-print ("-----------------------------------------------------")
-print ("Insert data: {}".format(data))
-print ("-----------------------------------------------------")
+    while 'LastEvaluatedKey' in response:
+        response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+        data.extend(response.get('Items', []))
+
+    return data
+
+table = dynamodb.Table('SensorValues')
 
 try:
-    response = table.put_item(
-        Item={
-            'id': random.randint(0,9),
-            'date': str(data),
-            'name': 'Marcos',
-            'lastname': 'Tzuc'
-        }
-    )
-    print("Datos insertados exitosamente:", response)
+    for i in range(1, 10):
+        print ("-----------------------------------------------------")
+        print (f"Insert data: {i}")
+
+        response = table.put_item(Item = {
+            "sensor": 'temperature',
+            "value": i,
+            "created_at": str(datetime.datetime.now())
+        })
+
+        print("Insert success:", response)
+        time.sleep(0.5)
+
 except Exception as e:
-    print("Error al insertar datos:", e)
+    print(f"Write Error: {e}")
 
 time.sleep(1)
-data = data + 1
 
-response = table.query(
-    KeyConditionExpression = Key('id').eq(7) & Key('date').eq('5') # , FilterExpression = Attr('date').eq('Marcos')
-)
+try:
+    items = scan_table(table)
+    #response = table.query(
+    #    KeyConditionExpression = Key('sensor').eq(10)
+    #    # KeyConditionExpression = Key('sensor').eq(7) & Key('sensor').eq('5') # , FilterExpression = Attr('date').eq('Marcos')
+    #)
+    
+except Exception as e:
+    print(f"Read Error: {e}")
 
 
-print ("----------------------")
+for item in items:
+    print ("-----------------------------------------------------")
+    print (f"Sensor: {item['sensor']} Value: {str(item['value'])}")
