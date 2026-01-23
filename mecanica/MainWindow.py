@@ -1,10 +1,10 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter.ttk import Combobox
-import api_client
-import window_client_details
+from ApiClient import ApiClient
+from FrameServiceDetails import FrameServiceDetails
 
-class Window(Frame):
+class MainWindow(Frame):
     def __init__(self, container=None):
         super().__init__(container)
         self.master = container
@@ -20,7 +20,7 @@ class Window(Frame):
 
     def create_widgets(self):
         try:
-            json_response = api_client.HttpClient().get_clients()
+            json_response = ApiClient().get_clients()
             self.clients = json_response['data']
         
         except Exception as e:
@@ -67,7 +67,7 @@ class Window(Frame):
 
     def func_show_client_details(self, client_data):
         try:
-            json_response = api_client.HttpClient().get_client_info(client_id=client_data['id'])
+            json_response = ApiClient().get_client_info(client_id=client_data['id'])
             self.func_get_services(client_data=client_data)
             
             self.id_string_var.set(json_response['data']['id'])
@@ -81,7 +81,7 @@ class Window(Frame):
 
     def func_get_services(self, client_data):        
         try:
-            json_response = api_client.HttpClient().get_services(client_id=client_data['id'])
+            json_response = ApiClient().get_services(client_id=client_data['id'])
             count = len(json_response['data'])
 
             if count == 0:
@@ -100,7 +100,14 @@ class Window(Frame):
             messagebox.showinfo("Error", f"Error: {e}")
 
     def func_get_service_details(self):
-        new_window = Toplevel()
-        new_window.title("Service Details")
-        new_window.geometry("550x400")
-        window_client_details.Window(new_window, 15)
+        client_id = self.id_string_var.get()
+        if not client_id:
+            messagebox.showwarning("Warning", "Please select a client first")
+            return
+
+        popup = Toplevel()
+        popup.title("Service Details")
+        popup.resizable(False, False)
+        popup.configure(padx=10, pady=10, width=710, height=400)
+    
+        FrameServiceDetails(popup, client_id)

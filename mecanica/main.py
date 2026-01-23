@@ -1,10 +1,10 @@
 import tkinter as tk
-import window_main
+from MainWindow import MainWindow
 
 container = tk.Tk()
 container.title("Clients")
 container.geometry("900x600")
 
-window_main.Window(container)
+MainWindow(container)
 
 container.mainloop()
