@@ -19,14 +19,14 @@ class ApiClient:
             print(f"Request error for {endpoint}: {e}")
             return {"data": [], "error": str(e)}
 
-    def get_clients(self):
+    def getAllClients(self):
         return self._get("/clients/all")
 
-    def get_client_info(self, client_id):
+    def getClientInfo(self, client_id):
         return self._get(f"/clients/info/{client_id}")
 
-    def get_services(self, client_id):
+    def getClientServices(self, client_id):
         return self._get(f"/clients/services/{client_id}")
 
-    def get_service_info(self, service_id):
+    def getServiceInfo(self, service_id):
         return self._get(f"/services/info/{service_id}")
