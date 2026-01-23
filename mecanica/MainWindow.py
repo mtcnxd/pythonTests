@@ -20,7 +20,7 @@ class MainWindow(Frame):
 
     def create_widgets(self):
         try:
-            json_response = ApiClient().get_clients()
+            json_response = ApiClient().getAllClients()
             self.clients = json_response['data']
         
         except Exception as e:
@@ -67,7 +67,7 @@ class MainWindow(Frame):
 
     def func_show_client_details(self, client_data):
         try:
-            json_response = ApiClient().get_client_info(client_id=client_data['id'])
+            json_response = ApiClient().getClientInfo(client_id=client_data['id'])
             self.func_get_services(client_data=client_data)
             
             self.id_string_var.set(json_response['data']['id'])
@@ -81,7 +81,7 @@ class MainWindow(Frame):
 
     def func_get_services(self, client_data):        
         try:
-            json_response = ApiClient().get_services(client_id=client_data['id'])
+            json_response = ApiClient().getClientServices(client_id=client_data['id'])
             count = len(json_response['data'])
 
             if count == 0:
