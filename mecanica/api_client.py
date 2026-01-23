@@ -10,5 +10,9 @@ class HttpClient:
         return response.json()
 
     def get_client_info(self, client_id):
-        response = requests.get(self.url + "/clients/info/" + client_id)
+        response = requests.get(self.url + "/clients/info/" + str(client_id))
+        return response.json()
+
+    def get_services(self, client_id):
+        response = requests.get(self.url + "/clients/services/" + str(client_id))
         return response.json()
