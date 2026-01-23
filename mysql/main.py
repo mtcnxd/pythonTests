@@ -1,33 +1,34 @@
-import pymysql.cursors # type: ignore
+import pymysql.cursors
 import tkinter.messagebox
 from tkinter import *
+from DataBase import *
+from QueryManager import QueryManager
 
-class Window(Frame):
-    def __init__(self, master):
-        self.connection = pymysql.connect(
-            host="127.0.0.1",
-            user="marcos",
-            password="Tucm+1985",
-            db="mecanica_rubio"
-        )
+class MainFrame(Frame):
+    def __init__(self, container):
+        super().__init__(container)
+        # Initialize the container
+        self.master = container
+        self.master.title("MySQL Client")
+        self.master.geometry("550x400")
+
+        # Initialize the database connection
+        # self.dataBase = DataBase()
         self.carId = StringVar()
-        self.loadInterface()
+        self.create_widgets()
 
-    def loadInterface(self):
-        LblId = Entry(textvariable=self.carId)
-        LblId.place(x=10, y=10)
+    def create_widgets(self):
+        Label(text="ID:").grid(row=0, column=0, padx=10, pady=10)
+        Entry(textvariable=self.carId, width=30).grid(row=0, column=1, pady=10)
+        Button(text="Search", command=QueryManager.searchClient).grid(row=1, column=1, sticky=W)
 
-        btnLoad = Button(text="Search", command=self.executeQuery)
-        btnLoad.place(x=10, y=40)
+        Label(text="Brand:").grid(row=2, column=0, padx=10)
+        Entry(width=30).grid(row=2, column=1, padx=10)
 
-        self.LblBrand = Entry()
-        self.LblBrand.place(x=10, y=90)
+        Label(text="Model:").grid(row=3, column=0, padx=10)
+        Entry(width=30).grid(row=3, column=1, padx=10)
 
-        self.LblModel = Entry()
-        self.LblModel.place(x=10, y=120)
-
-        btnInsert = Button(text="Save", command=self.insertData)
-        btnInsert.place(x=10, y=150)
+        Button(text="Save", command=QueryManager.insertClient).grid(row=4, column=1, sticky=W)
 
     def executeQuery(self):
         id = self.carId.get()
@@ -67,10 +68,8 @@ class Window(Frame):
         except:
             tkinter.messagebox.showerror(title="insert error", message="There is some error")
 
-main = Tk()
-main.title("MySQL")
-main.geometry("400x400")
 
-Window(main)
-
-main.mainloop()
+if __name__ == "__main__":
+    container = Tk()
+    MainFrame(container)
+    container.mainloop()
