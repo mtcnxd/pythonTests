@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter.ttk import Combobox
 import api_client
 import window_client_details
 
@@ -8,7 +9,9 @@ class Window(Frame):
         super().__init__(container)
         self.master = container
         self.clients = []
+        self.services = []
         self.listbox = Listbox(self.master, width=40)
+        self.services_combobox = Combobox(self.master, width=38)
         self.id_string_var = StringVar()
         self.name_string_var = StringVar()
         self.phone_string_var = StringVar()
@@ -36,10 +39,8 @@ class Window(Frame):
         self.listbox.config(yscrollcommand=scrollbar.set)
         self.listbox.bind("<<ListboxSelect>>", self.func_on_select)
 
-        Label(self.master, text="Client ID").grid(row=1, column=0, sticky="w", padx=10, pady=10)
+        Label(self.master, text="ID").grid(row=1, column=0, sticky="w", padx=10, pady=10)
         Entry(self.master, width=40, textvariable=self.id_string_var).grid(row=1, column=1, padx=10, pady=10)
-        
-        Button(self.master, text="Search client", command=self.func_get_details).grid(row=2, column=1, padx=10, pady=10, sticky="w")
 
         Label(self.master, text="Name").grid(row=3, column=0, sticky="w", padx=10, pady=10)
         Entry(self.master, width=40, textvariable=self.name_string_var).grid(row=3, column=1, padx=10, pady=10)
@@ -50,11 +51,10 @@ class Window(Frame):
         Label(self.master, text="Email").grid(row=5, column=0, sticky="w", padx=10, pady=10)
         Entry(self.master, width=40, textvariable=self.email_string_var).grid(row=5, column=1, padx=10, pady=10)
 
-    def func_get_details(self):
-        new_window = Toplevel()
-        new_window.title("Client Details")
-        new_window.geometry("400x400")
-        # window_client_details.Window(new_window, client_id=self.client_id_string_var.get())
+        Label(self.master, text="Services").grid(row=6, column=0, sticky="w", padx=10, pady=10)
+        self.services_combobox.grid(row=6, column=1, padx=10, pady=10)
+
+        Button(self.master, text="Service Details", command=self.func_get_service_details).grid(row=7, column=1, padx=10, pady=10, sticky="w")
 
     def func_on_select(self, event):
         selected_index = self.listbox.curselection()
@@ -63,31 +63,44 @@ class Window(Frame):
             index = selected_index[0]
             selected_client = self.clients[index]
             print(f"ID: {selected_client['id']} Name: {selected_client['name']}")
-            self.func_get_services(selected_client)
             self.func_show_client_details(selected_client)
 
     def func_show_client_details(self, client_data):
         try:
             json_response = api_client.HttpClient().get_client_info(client_id=client_data['id'])
+            self.func_get_services(client_data=client_data)
+            
+            self.id_string_var.set(json_response['data']['id'])
             self.name_string_var.set(json_response['data']['name'])
             self.phone_string_var.set(json_response['data']['phone'])
             self.email_string_var.set(json_response['data']['email'])
             
         except Exception as e:
             print(f"Error: {e}")
+            messagebox.showinfo("Error", f"Error: {e}")
 
-    def func_get_services(self, client_data):
+    def func_get_services(self, client_data):        
         try:
             json_response = api_client.HttpClient().get_services(client_id=client_data['id'])
             count = len(json_response['data'])
 
             if count == 0:
                 messagebox.showinfo("Services", "No services found")
+                self.services = ["No services found"]
                 return
 
+            self.services = []
             for service in json_response['data']:
-                print(f"ID: {service['id']} - Name: {service['car']} - Status: {service['status']}")
+                self.services.append(f"{service['id']} - {service['car']} - {service['status']}")
+
+            self.services_combobox.config(values=self.services)
         
         except Exception as e:
             print(f"Error: {e}")
             messagebox.showinfo("Error", f"Error: {e}")
+
+    def func_get_service_details(self):
+        new_window = Toplevel()
+        new_window.title("Service Details")
+        new_window.geometry("550x400")
+        window_client_details.Window(new_window, 15)
