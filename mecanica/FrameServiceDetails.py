@@ -12,7 +12,7 @@ class FrameServiceDetails(Frame):
 
     def create_widgets(self):
         # Get service details from API
-        client_info = self.get_client_details(self.client_id)
+        client_info = self.get_client_info(self.client_id)
 
         if not client_info:
             messagebox.showinfo("Error", "Could not retrieve client details")
@@ -33,9 +33,9 @@ class FrameServiceDetails(Frame):
         email_var.set(client_info.get('email'))
         Entry(self, textvariable=email_var, width=40).grid(row=2, column=1)
         
-    def get_client_details(self, client_id):
+    def get_client_info(self, client_id):
         try:
-            json_response = ApiClient().get_client_info(client_id)
+            json_response = ApiClient().getClientInfo(client_id)
             return json_response['data']
 
         except Exception as e:
