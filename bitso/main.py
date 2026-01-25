@@ -1,33 +1,7 @@
-import json
-import requests
-
-def lambda_handler():
-	return {
-		'statusCode': 200,
-		'body': getBitcoinPrice()
-	}
-
-def getBitcoinPrice():
-	url = "https://api-stage.bitso.com/api/v3/ticker"
-	response = requests.get(url)
-	results = parsePrice(response.text)
-
-	for key, value in results.items():
-		print(f"{key} \t {value}")
-		print("-------------------------------------")
-
-def parsePrice(ticker):
-	result = {}
-	try:
-		object = json.loads(str(ticker))
-		for crypto in (object['payload']):
-			result[crypto['book']] = crypto['last']
-
-		return result
-
-	except Exception as error:
-		print(error)
-
+from Bitso import Bitso
 	
+if __name__ == "__main__":
+	bitso = Bitso()
+	book_info = bitso.get_book_info("btc_usdt")
 	
-lambda_handler()
+	print(f"You have selected: {book_info['book']} the current price is: {book_info['last']}")
