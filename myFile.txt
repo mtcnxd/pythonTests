@@ -1,7 +1,0 @@
-Este es un archivo de prueba
-
-
-hola mundo desde iPad
-
-hola mundo, esta es una pequeña prueba de lo que se puede 
-hacer desde la app de iPad para hacer codigo y commits

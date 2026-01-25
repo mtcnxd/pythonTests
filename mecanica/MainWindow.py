@@ -17,6 +17,11 @@ class MainWindow(Frame):
         self.phone_string_var = StringVar()
         self.email_string_var = StringVar()
         self.create_widgets()
+        self.background_job()
+
+    def background_job(self):
+        print("Background job")
+        self.after(500, self.background_job)
 
     def create_widgets(self):
         try:
