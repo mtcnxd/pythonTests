@@ -7,8 +7,7 @@ class Bitso:
 
     def get_ticker(self):
         try:
-            url = "https://api-stage.bitso.com/api/v3/ticker"
-            response = requests.get(url)
+            response = requests.get(self.url)
             return response.json()
 
         except Exception as e:
