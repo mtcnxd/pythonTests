@@ -1,10 +1,10 @@
-from DataBase import DataBase
+from DataBase import *
 import time
 
 if __name__ == __name__ :
-    db = DataBase()
+    database = DataBase()
 
     while True:
         print("Hola mundo")
-        db.query("INSERT INTO")
+        database.query("INSERT INTO table () VALUES ()")
         time.sleep(1)
