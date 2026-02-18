@@ -1,7 +1,7 @@
 from DataBase import *
 import time
 
-if __name__ == __name__ :
+if __name__ == "__main__" :
     database = DataBase()
 
     while True:
