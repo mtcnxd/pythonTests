@@ -12,7 +12,7 @@ class DataBase:
             )
             self.cursor = self.connection.cursor(pymysql.cursors.DictCursor)
         except e:
-            print("An error ocurred while connecting: {e}")
+            print("AN ERROR OCURRED WHILE CONNECTING: {e}")
 
     def __del__(self):
         self.connection.close()
@@ -25,7 +25,7 @@ class DataBase:
 
         except Exception as e:
             self.connection.rollback()
-            print(f"An error ocurred while execue query: {e}")
+            print(f"AN ERROR OCURRED WHILE EXECUTE QUERY: {e}")
             return None
 
     def query(self, query, values):
@@ -35,4 +35,4 @@ class DataBase:
                 self.connection.commit()
         
         except Exception as e:
-            print(f"An error ocurred while insert data: {e}")
+            print(f"AN ERROR OCURRED WHILE INSERT DATA: {e}")

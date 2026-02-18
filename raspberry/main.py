@@ -1,16 +1,30 @@
 from DataBase import *
-import time
+from models.Sensor import *
 from datetime import datetime
+import time
+import random
 
 if __name__ == "__main__" :
     database = DataBase()
+    sensor = Sensor()
 
     while True:
         now = datetime.now()
-        database.query("INSERT INTO sensors (name, location, update_at, created_at) VALUES (%s,%s,%s,%s)", ('marcos', 'tzuc', now, now))
 
-        result = database.select("SELECT * FROM sensors")
+        data = {
+            'name': str(random.randint(1, 100)),
+            'location': 'vergel',
+            'update_at': now,
+            'created_at': now
+        }
 
-        print(result)
+        keys = data.keys()
+        print(tuple(keys))
 
-        time.sleep(1)
+        sensor.create(data)
+        
+        result = sensor.find(69)
+
+        print(data)
+
+        time.sleep(5)
