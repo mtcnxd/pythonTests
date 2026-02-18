@@ -22,3 +22,12 @@ class Sensor:
         query = f"INSERT INTO {self.table} ({columns}) VALUES ({placeholders})"
 
         return self.database.query(query, values)
+
+    def update(self, id, data):
+        columns = ",".join(data.keys())
+        placeholders = ",".join(["%s"] * len(data))
+        values = tuple(data.values())
+
+        query = f"UPDATE {self.table} SET {columns} = {placeholders} WHERE id = {id}"
+
+        return self.database.query(query, values)
