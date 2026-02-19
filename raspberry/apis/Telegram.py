@@ -1,14 +1,15 @@
 import requests
+import configs
 
 class Telegram:
     def __init__(self):
-        self.url = "https://api.telegram.org/bot8373335422:AAHcXOLPxVUZHMg5gQW1Zb_FZ7itqeuIm6I/sendMessage"
+        self.url = "https://api.telegram.org/" + configs.telegram_token + "/sendMessage"
 
     def send_message(self, message):
         try:
             response = requests.post(
                 self.url,
-                data={'chat_id':'-5014845636', 'text':message}
+                data={'chat_id': configs.chat_id, 'text':message}
             )
             
             return response.json()

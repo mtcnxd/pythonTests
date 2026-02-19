@@ -1,30 +1,42 @@
 import pymysql.cursors
+import configs
 
 class DataBase:
     def __init__(self):
         try: 
             self.connection = pymysql.connect(
                 host="127.0.0.1",
-                user="root",
-                password="password",
+                user=configs.db_user,
+                password=configs.db_pass,
                 db="BitsoData",
                 charset="utf8mb4",
             )
             self.cursor = self.connection.cursor(pymysql.cursors.DictCursor)
-        except e:
+        except Exception as e:
             print("AN ERROR OCURRED WHILE CONNECTING: {e}")
 
     def __del__(self):
         self.connection.close()
 
-    def select(self, query):
+    def select_all(self, query):
         try:
-            with self.connection.cursor() as cursor:
+            with self.cursor() as cursor:
                 cursor.execute(query)
                 return cursor.fetchall()
 
         except Exception as e:
-            self.connection.rollback()
+            self.rollback()
+            print(f"AN ERROR OCURRED WHILE EXECUTE QUERY: {e}")
+            return None
+
+    def select_one(self, query):
+        try:
+            with self.cursor as cursor:
+                cursor.execute(query)
+                return cursor.fetchone()
+
+        except Exception as e:
+            self.rollback()
             print(f"AN ERROR OCURRED WHILE EXECUTE QUERY: {e}")
             return None
 

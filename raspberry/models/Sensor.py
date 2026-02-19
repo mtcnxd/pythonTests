@@ -8,11 +8,19 @@ class Sensor:
     
     def find(self, id):
         query = f"SELECT * FROM {self.table} WHERE id = {id}"
-        return self.database.select(query)
+        return self.database.select_one(query)
+
+    def get(self, id):
+        query = f"SELECT * FROM {self.table} WHERE id = {id}"
+        return self.database.select_all(query)
 
     def first(self, key):
         query = f"SELECT * FROM {self.table} WHERE {key} LIMIT 1"
-        return self.database.select(query)
+        return self.database.select_one(query)
+    
+    def last(self):
+        query = f"SELECT * FROM {self.table} ORDER BY ID DESC LIMIT 1"
+        return self.database.select_one(query)
 
     def create(self, data):
         columns = ",".join(data.keys())
