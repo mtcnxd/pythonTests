@@ -28,5 +28,8 @@ if __name__ == "__main__" :
     print(f"Current price: {to_currency(book_info['last'])}")
     print(f"Percentage: {to_percentage(percentage)}")
 
-    if percentage > 1:
-        Telegram().send_message(f"Current Bitcoin price: {to_currency(book_info['last'])} the change is: {to_percentage(percentage)}")
+    Telegram().send_message(f"Bitcoin current price: *{to_currency(book_info['last'])}*\n"
+                            f"Last price *{to_currency(last_price['location'])}*\n"
+                            f"The change represents: *{to_percentage(percentage)}*")
+
+    create_data(book_info)

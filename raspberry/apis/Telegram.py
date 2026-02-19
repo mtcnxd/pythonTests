@@ -9,7 +9,7 @@ class Telegram:
         try:
             response = requests.post(
                 self.url,
-                data={'chat_id': configs.chat_id, 'text':message}
+                data={'chat_id': configs.chat_id, 'text':message, 'parse_mode':'Markdown'}
             )
             
             return response.json()
